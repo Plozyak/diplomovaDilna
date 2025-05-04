@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diplomová Pomoc – Nezávazná poptávka</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17049474539"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17049474539');
+  </script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f1f8e9;
+      margin: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #e6f2e6;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #2e7d32;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+    p, ul {
+      font-size: 16px;
+      color: #2e7d32;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #388e3c;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #status {
+      color: #2e7d32;
+      margin-top: 10px;
+    }
+    .whatsapp {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🎓 Komplexní pomoc s rozpracováním odborných materiálů pro závěrečné práce.</h2>
+    <p>
+      <a href="https://www.diplomovapomoc.com/" target="_blank" style="text-decoration: underline; font-weight: bold;">
+        👉 Zjisti více na hlavní stránce nebo rovnou vyplň nezávaznou objednávku níže.
+      </a>
+    </p>
+    <ul>
+      <li>📁 Návrh tématu a struktury práce</li>
+      <li>🔍 Vyhledávání zdrojů a odborná rešerše</li>
+      <li>🔧 Jazyková a stylistická úprava textu</li>
+      <li>🖐️ Formátování dle požadovaných norem</li>
+      <li>✍️ Tvoříme originální texty</li>
+      <li>🌟 Materiály přesně podle vašich požadavků</li>
+    </ul>
+    <p><strong>Pracujeme eticky a v souladu s pravidly škol. Pomáháme správným směrem.</strong></p>
+    <input id="name" type="text" placeholder="Vaše jméno" required />
+    <input id="email" type="email" placeholder="Váš e-mail" required />
+    <textarea id="message" placeholder="S čím vám potřebujeme pomoci? (typ práce, počet stran, termín odevzdání)" required></textarea>
+    <button id="sendBtn" onclick="sendTelegram()">📤 Odeslat</button>
+    <p id="status"></p>
+  </div>
+
+  <a href="https://wa.me/420608369656" target="_blank" class="whatsapp">💬 WhatsApp</a>
+
+  <script>
+    function sendTelegram() {
+      const token = "8129644056:AAGtcM8b8SADps85oGsDh3oC_IhIwTyu-b4";
+      const chatId = "1445517709";
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const msg = document.getElementById("message").value.trim();
+      const status = document.getElementById("status");
+      const btn = document.getElementById("sendBtn");
+
+      if (!name || !email || !msg) {
+        status.innerText = "❗ Vyplňte prosím všechna pole.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "⏳ Odesílám...";
+
+      const text = `📥 *NOVÁ POPTÁVKA*
+
+👤 *Jméno:* ${name}
+📧 *Email:* ${email}
+📘 *Zpráva:* ${msg}`;
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: text,
+          parse_mode: "Markdown"
+        })
+      }).then(response => {
+        if (response.ok) {
+          status.innerText = "✅ Zpráva byla úspěšně odeslána!";
+          btn.innerText = "✅ Odesláno";
+          document.getElementById("name").value = '';
+          document.getElementById("email").value = '';
+          document.getElementById("message").value = '';
+
+          gtag('event', 'conversion', {
+            send_to: 'AW-17049474539/XXXXXXXXXXX',
+            value: 1.0,
+            currency: 'CZK'
+          });
+
+        } else {
+          status.innerText = "❌ Chyba při odesílání zprávy.";
+          btn.innerText = "📤 Odeslat";
+        }
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerText = "📤 Odeslat";
+        }, 3000);
+      }).catch(error => {
+        status.innerText = "⚠️ Problém s připojením k Telegram API.";
+        btn.innerText = "📤 Odeslat";
+        btn.disabled = false;
+      });
+    }
+  </script>
+</body>
+</html>
