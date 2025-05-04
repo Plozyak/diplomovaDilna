@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -120,11 +119,7 @@
       btn.disabled = true;
       btn.innerText = "⏳ Odesílám...";
 
-      const text = `📥 *NOVÁ POPTÁVKA*
-
-👤 *Jméno:* ${name}
-📧 *Email:* ${email}
-📘 *Zpráva:* ${msg}`;
+      const text = `📥 *NOVÁ POPTÁVKA*\n\n👤 *Jméno:* ${name}\n📧 *Email:* ${email}\n📘 *Zpráva:* ${msg}`;
 
       fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
@@ -142,8 +137,9 @@
           document.getElementById("email").value = '';
           document.getElementById("message").value = '';
 
+          // ✅ Google Ads Conversion tracking
           gtag('event', 'conversion', {
-            send_to: 'AW-17049474539/XXXXXXXXXXX',
+            send_to: 'AW-17049474539/XXXXXXXXXXX', // ← zde nahraď platným event ID
             value: 1.0,
             currency: 'CZK'
           });
